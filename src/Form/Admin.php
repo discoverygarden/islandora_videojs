@@ -1,17 +1,12 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\islandora_videojs\Form\IslandoraVideojsAdmin.
- */
-
 namespace Drupal\islandora_videojs\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 
-class IslandoraVideojsAdmin extends ConfigFormBase {
+class Admin extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
@@ -45,6 +40,9 @@ class IslandoraVideojsAdmin extends ConfigFormBase {
     return ['islandora_videojs.settings'];
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
     // Get settings.
     $form = [];
@@ -74,4 +72,3 @@ class IslandoraVideojsAdmin extends ConfigFormBase {
   }
 
 }
-?>
