@@ -1,0 +1,12 @@
+videojs:
+  version: 1.x
+  js: {}
+  css: {}
+videojs-hls:
+  version: 1.x
+  js: {}
+videojs-responsive:
+  version: 1.x
+  css:
+    base:
+      css/videojs_responsive.css: {}

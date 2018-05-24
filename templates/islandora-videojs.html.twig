@@ -1,0 +1,37 @@
+{{ attach_library('islandora_videojs/videojs') }}
+{% if hls %}
+  {{ attach_library('islandora_videojs/videojs-hls') }}
+{% endif %}
+{% if responsive %}
+  {{ attach_library('islandora_videojs/videojs-responsive') }}
+{% endif %}
+
+<video id="islandora_videojs"
+  {% if not responsive %}
+    width="640" height="360"
+  {% endif %}
+  {% if not center_play_button %}
+    class="video-js vjs-default-skin"
+  {% else %}
+    class="video-js vjs-default-skin vjs-big-play-centered"
+  {% endif %}
+  controls
+  preload="auto"
+  {% if tn is defined %}
+    poster="{{ tn }}"
+  {% endif %}
+  {% if responsive %}
+    data-setup='{"fluid": true}'
+  {% else %}
+    data-setup="{}"
+  {% endif %}
+  >
+  {% for source in sources %}
+    <source src="{{ source.url }}" type='{{ source.mime }}'>
+  {% endfor %}
+</video>
+{% if sources is empty %}
+  <div id="video-js-warning">
+    No video sources available.
+  </div>
+{%  endif %}
