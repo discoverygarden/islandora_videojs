@@ -1,0 +1,5 @@
+islandora_videojs.admin:
+  route_name: islandora_videojs.admin
+  parent: islandora.viewers_admin
+  title: 'Video.js'
+  description: 'Configure the Video.js viewer.'

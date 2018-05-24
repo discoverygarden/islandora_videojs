@@ -4,7 +4,6 @@ namespace Drupal\islandora_videojs\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 
 /**
  * Module settings form.
@@ -24,16 +23,11 @@ class Admin extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('islandora_videojs.settings');
 
-    foreach (Element::children($form) as $variable) {
-      $config->set($variable, $form_state->getValue($form[$variable]['#parents']));
-    }
+    $config->set('islandora_videojs_hls_library', $form_state->getValue('islandora_videojs_hls_library'));
+    $config->set('islandora_videojs_center_play_button', $form_state->getValue('islandora_videojs_center_play_button'));
+    $config->set('islandora_videojs_responsive', $form_state->getValue('islandora_videojs_responsive'));
+
     $config->save();
-
-    if (method_exists($this, '_submitForm')) {
-      $this->_submitForm($form, $form_state);
-    }
-
-    parent::submitForm($form, $form_state);
   }
 
   /**
@@ -47,7 +41,7 @@ class Admin extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    // Get settings.
+    $form_state->loadInclude('islandora_videojs', 'inc', 'includes/admin.form');
     $form = [];
     $form['islandora_videojs_hls_library'] = [
       '#type' => 'checkbox',
@@ -69,6 +63,10 @@ class Admin extends ConfigFormBase {
       '#title' => $this->t('Responsive player'),
       '#description' => $this->t('Make the videojs player responsive (requires a responsive theme)'),
       '#default_value' => $this->config('islandora_videojs.settings')->get('islandora_videojs_responsive'),
+    ];
+    $form['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Submit'),
     ];
     return $form;
   }
