@@ -6,6 +6,9 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 
+/**
+ * Module settings form.
+ */
 class Admin extends ConfigFormBase {
 
   /**
@@ -43,32 +46,31 @@ class Admin extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
     // Get settings.
     $form = [];
     $form['islandora_videojs_hls_library'] = [
       '#type' => 'checkbox',
-      '#title' => t('Videojs-contrib-hls library'),
-      '#description' => t('Include the videojs-contrib-hls library js, videojs.contrib-hls.js?'),
-      '#default_value' => \Drupal::config('islandora_videojs.settings')->get('islandora_videojs_hls_library'),
+      '#title' => $this->t('Videojs-contrib-hls library'),
+      '#description' => $this->t('Include the videojs-contrib-hls library js, videojs.contrib-hls.js?'),
+      '#default_value' => $this->config('islandora_videojs.settings')->get('islandora_videojs_hls_library'),
       '#element_validate' => [
-        'islandora_videojs_admin_islandora_videojs_hls_library_validate'
-        ],
+        'islandora_videojs_admin_islandora_videojs_hls_library_validate',
+      ],
     ];
     $form['islandora_videojs_center_play_button'] = [
       '#type' => 'checkbox',
-      '#title' => t('Center play button'),
-      '#description' => t('Put the play button in the center of the player, rather than the top left corner'),
-      '#default_value' => \Drupal::config('islandora_videojs.settings')->get('islandora_videojs_center_play_button'),
+      '#title' => $this->t('Center play button'),
+      '#description' => $this->t('Put the play button in the center of the player, rather than the top left corner'),
+      '#default_value' => $this->config('islandora_videojs.settings')->get('islandora_videojs_center_play_button'),
     ];
     $form['islandora_videojs_responsive'] = [
       '#type' => 'checkbox',
-      '#title' => t('Responsive player'),
-      '#description' => t('Make the videojs player responsive (requires a responsive theme)'),
-      '#default_value' => \Drupal::config('islandora_videojs.settings')->get('islandora_videojs_responsive'),
+      '#title' => $this->t('Responsive player'),
+      '#description' => $this->t('Make the videojs player responsive (requires a responsive theme)'),
+      '#default_value' => $this->config('islandora_videojs.settings')->get('islandora_videojs_responsive'),
     ];
-
-    return parent::buildForm($form, $form_state);
+    return $form;
   }
 
 }

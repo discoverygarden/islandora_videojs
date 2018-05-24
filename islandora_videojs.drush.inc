@@ -2,7 +2,7 @@
 
 /**
  * @file
- * drush integration for islandora_videojs.
+ * Drush integration for islandora_videojs.
  */
 
 /**
@@ -10,7 +10,7 @@
  */
 define('VIDEOJS_DOWNLOAD_URI', 'https://github.com/videojs/video.js/releases/download/v5.10.2/video-js-5.10.2.zip');
 /**
- * The initial Video.js directory
+ * The initial Video.js directory.
  */
 define('VIDEOJS_ORIGINAL_DIR', 'video-js');
 
@@ -18,17 +18,17 @@ define('VIDEOJS_ORIGINAL_DIR', 'video-js');
  * Implements hook_drush_command().
  */
 function islandora_videojs_drush_command() {
-  $items = array();
+  $items = [];
   // The key in the $items array is the name of the command.
-  $items['videojs-plugin'] = array(
+  $items['videojs-plugin'] = [
     'callback' => 'drush_islandora_videojs_plugin',
     'description' => dt('Download and install the Video.js plugin.'),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUSH,
-    'arguments' => array(
+    'arguments' => [
       'path' => dt('Optional. A path where to install the Video.js plugin. If omitted Drush will use the default location.'),
-    ),
-    'aliases' => array('videojsplugin'),
-  );
+    ],
+    'aliases' => ['videojsplugin'],
+  ];
 
   return $items;
 }
@@ -58,7 +58,7 @@ function drush_islandora_videojs_plugin() {
   // Create the path if it does not exist.
   if (!is_dir($path)) {
     drush_op('mkdir', $path);
-    drush_log(dt('Directory @path was created', array('@path' => $path)), 'notice');
+    drush_log(dt('Directory @path was created', ['@path' => $path]), 'notice');
   }
 
   // Set the directory to the download location.
@@ -74,7 +74,7 @@ function drush_islandora_videojs_plugin() {
     if (is_dir($dirname) || is_dir('video-js')) {
       drush_delete_dir($dirname, TRUE);
       drush_delete_dir('video-js', TRUE);
-      drush_log(dt('A existing Video.js plugin was deleted from @path', array('@path' => $path)), 'notice');
+      drush_log(dt('A existing Video.js plugin was deleted from @path', ['@path' => $path]), 'notice');
     }
 
     // Decompress the zip archive.
@@ -88,10 +88,10 @@ function drush_islandora_videojs_plugin() {
   }
 
   if (is_dir($dirname)) {
-    drush_log(dt('Video.js plugin has been installed in @path', array('@path' => $path)), 'success');
+    drush_log(dt('Video.js plugin has been installed in @path', ['@path' => $path]), 'success');
   }
   else {
-    drush_log(dt('Drush was unable to install the Video.js plugin to @path', array('@path' => $path)), 'error');
+    drush_log(dt('Drush was unable to install the Video.js plugin to @path', ['@path' => $path]), 'error');
   }
 
   // Set working directory back to the previous working directory.

@@ -2,22 +2,22 @@
 
 /**
  * @file
- * An Islandora viewer module using Video.js
+ * An Islandora viewer module using Video.js.
  */
 
 /**
  * Implements hook_islandora_viewer_info().
  */
 function islandora_videojs_islandora_viewer_info() {
-  return array(
-    'islandora_videojs' => array(
+  return [
+    'islandora_videojs' => [
       'label' => t('video.js player'),
       'description' => t('video.js for audio and/or video.'),
       'callback' => 'islandora_videojs_callback',
-      'mimetype' => array('audio/mpeg', 'video/mp4'),
+      'mimetype' => ['audio/mpeg', 'video/mp4'],
       'configuration' => 'admin/islandora/islandora_viewers/videojs',
-    ),
-  );
+    ],
+  ];
 }
 
 /**
@@ -41,11 +41,11 @@ function islandora_videojs_menu() {
  * Implements hook_theme().
  */
 function islandora_videojs_theme($existing, $type, $theme, $path) {
-  return array(
-    'islandora_videojs' => array(
-      'variables' => array('object' => NULL, 'params' => NULL),
-    ),
-  );
+  return [
+    'islandora_videojs' => [
+      'variables' => ['object' => NULL, 'params' => NULL],
+    ],
+  ];
 }
 
 /**
@@ -53,7 +53,7 @@ function islandora_videojs_theme($existing, $type, $theme, $path) {
  */
 function template_preprocess_islandora_videojs(array &$variables) {
   $params = $variables['params'];
-  $variables['sources'] = array();
+  $variables['sources'] = [];
   if (isset($params['tn'])) {
     $variables['tn'] = $params['tn'];
   }
@@ -91,7 +91,7 @@ function template_preprocess_islandora_videojs(array &$variables) {
     $variables['sources'] = $params['sources'];
   }
   elseif (isset($params['url']) && isset($params['mime'])) {
-    $variables['sources'][] = array('url' => $params['url'], 'mime' => $params['mime']);
+    $variables['sources'][] = ['url' => $params['url'], 'mime' => $params['mime']];
   }
   $variables['center_play_button'] = \Drupal::config('islandora_videojs.settings')->get('islandora_videojs_center_play_button');
   $variables['responsive'] = \Drupal::config('islandora_videojs.settings')->get('islandora_videojs_responsive');
@@ -114,7 +114,7 @@ function template_preprocess_islandora_videojs(array &$variables) {
  * @param array $params
  *   Array with configuration info for the audio player.
  */
-function islandora_videojs_callback($params = array()) {
+function islandora_videojs_callback($params = []) {
   // @FIXME
 // theme() has been renamed to _theme() and should NEVER be called directly.
 // Calling _theme() directly can alter the expected output and potentially
