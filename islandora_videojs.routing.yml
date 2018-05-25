@@ -1,0 +1,7 @@
+islandora_videojs.admin:
+  path: '/admin/config/islandora/islandora_viewers/videojs'
+  defaults:
+    _title: 'Video.js'
+    _form: '\Drupal\islandora_videojs\Form\Admin'
+  requirements:
+    _permission: 'administer site configuration'

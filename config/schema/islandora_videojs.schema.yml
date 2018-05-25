@@ -1,0 +1,10 @@
+islandora_videojs.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    islandora_videojs_hls_library:
+      type: boolean
+    islandora_videojs_center_play_button:
+      type: boolean
+    islandora_videojs_responsive:
+      type: boolean
