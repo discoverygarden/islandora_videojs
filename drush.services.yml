@@ -2,4 +2,6 @@ services:
   islandora_videojs.commands:
     class: \Drupal\islandora_videojs\Commands\IslandoraVideojsCommands
     tags:
-      - { name: drush.command }
+      - name: drush.command
+    arguments:
+      - '@file_system'
