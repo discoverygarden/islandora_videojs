@@ -8,6 +8,7 @@ use Drush\SiteAlias\SiteAliasManagerAwareTrait;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Archiver\Tar;
 use Symfony\Component\Filesystem\Filesystem;
+use Drupal\Component\Plugin\PluginManagerInterface;
 
 /**
  * A Drush commandfile.
@@ -32,10 +33,18 @@ class IslandoraVideojsCommands extends DrushCommands implements SiteAliasManager
   protected $fileSystem;
 
   /**
+   * Archive plugin manager.
+   *
+   * @var Drupal\Core\Archiver\ArchiverManager
+   */
+  protected $archiveManager;
+
+  /**
    * Constructor.
    */
-  public function __construct(FileSystemInterface $file_system) {
+  public function __construct(FileSystemInterface $file_system, PluginManagerInterface $archive_manager) {
     $this->fileSystem = $file_system;
+    $this->archiveManager = $archive_manager;
   }
 
   /**
@@ -43,23 +52,25 @@ class IslandoraVideojsCommands extends DrushCommands implements SiteAliasManager
    */
   const DOWNLOAD_URI = 'https://github.com/videojs/video.js/releases/download/v5.10.2/video-js-5.10.2.zip';
 
+  const INSTALL_DIR = 'video-js';
   /**
    * The initial Video.js directory.
    */
-  const ORIGINAL_DIR = 'video-js';
+  const ORIGINAL_DIR = self::INSTALL_DIR;
+  const DESCRIPTOR = 'Video.js plugin';
 
   /**
-   * Download and install the Video.js plugin.
+   * Download and install the plugin.
    *
    * @param string $path
-   *   Optional. A path where to install the Video.js plugin. If omitted Drush
+   *   Optional. A path where to install the plugin. If omitted Drush
    *   will use the default location.
    *
-   * @command videojs:plugin
+   * @command islandora_videojs:plugin
    * @aliases videojsplugin,videojs-plugin
    */
   public function plugin($path = NULL) {
-    if ($path === NULL) {
+    if (!$path) {
       $this->logger()->debug('Acquiring default installation path.');
       $path = implode('/', [
         $this->siteAliasManager()->getSelf()->root(),
@@ -67,6 +78,7 @@ class IslandoraVideojsCommands extends DrushCommands implements SiteAliasManager
         'all',
         'libraries',
       ]);
+      $this->logger()->info('Installing to {0}.', [$path]);
     }
 
     $filesystem = new Filesystem();
@@ -74,35 +86,41 @@ class IslandoraVideojsCommands extends DrushCommands implements SiteAliasManager
     // Create the path if it does not exist.
     if (!is_dir($path)) {
       $this->fileSystem->mkdir($path);
-      $this->logger()->notice('Directory @path was created', ['@path' => $path]);
+      $this->logger()->notice('Directory {0} was created', [$path]);
     }
 
-    // Download the zip archive.
-    if ($filepath = system_retrieve_file(static::DOWNLOAD_URI)) {
+    $original_dir = implode('/', [$path, static::ORIGINAL_DIR]);
+    $install_dir = implode('/', [$path, static::INSTALL_DIR]);
+
+    // Download the archive.
+    if ($filepath = system_retrieve_file(static::DOWNLOAD_URI, $path, FALSE, FILE_EXISTS_REPLACE)) {
       $filename = $this->fileSystem->basename($filepath);
-      $dirname = static::ORIGINAL_DIR;
 
-      // Remove any existing Video.js plugin directory.
-      if (is_dir($dirname) || is_dir('video-js')) {
-        $filesystem->remove([$dirname, 'video-js']);
-        $this->logger()->notice('A existing Video.js plugin was deleted from @path', ['@path' => $path]);
+      // Remove any existing plugin directory.
+      if (is_dir($original_dir) || is_dir($install_dir)) {
+        $filesystem->remove([$original_dir, $install_dir]);
+        $this->logger()->notice('A existing {1} was deleted from {0}', [$path, static::DESCRIPTOR]);
       }
 
-      // Decompress the zip archive.
-      (new Tar($filename))->extract('video-js');
+      // Decompress the archive.
+      $this->archiveManager
+        ->getInstance(['filepath' => $filepath])
+        ->extract($install_dir);
 
-      // Change the directory name to "video-js" if needed.
-      if ($dirname != 'video-js') {
-        $filesystem->rename($dirname, 'video-js');
-        $dirname = 'video-js';
+      // Change the directory name if needed.
+      if (static::ORIGINAL_DIR != static::INSTALL_DIR) {
+        $filesystem->rename(
+          $original_dir,
+          $install_dir
+        );
       }
     }
 
-    if (is_dir($dirname)) {
-      $this->logger()->success('Video.js plugin has been installed in @path', ['@path' => $path]);
+    if (is_dir($install_dir)) {
+      $this->logger()->success('{1} has been installed in {0}', [$install_dir, static::DESCRIPTOR]);
     }
     else {
-      $this->logger()->error('Drush was unable to install the Video.js plugin to @path', ['@path' => $path]);
+      $this->logger()->error('Drush was unable to install the {1} to {0}', [$install_dir, static::DESCRIPTOR]);
     }
 
   }
