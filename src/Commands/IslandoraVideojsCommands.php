@@ -51,8 +51,8 @@ class IslandoraVideojsCommands extends AbstractPluginAcquisition {
    * @command islandora_videojs:plugin
    * @aliases videojsplugin,videojs-plugin
    */
-  public function plugin($path = NULL) {
-    return parent::plugin($path);
+  public function installPlugin($path = NULL) {
+    return $this->plugin($path);
   }
 
 }
