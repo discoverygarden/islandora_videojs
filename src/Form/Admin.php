@@ -55,13 +55,15 @@ class Admin extends ConfigFormBase {
     $form['islandora_videojs_center_play_button'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Center play button'),
-      '#description' => $this->t('Put the play button in the center of the player, rather than the top left corner'),
+      '#description' => $this->t('Put the play button in the center of the
+        player, rather than the top left corner.'),
       '#default_value' => $this->config('islandora_videojs.settings')->get('islandora_videojs_center_play_button'),
     ];
     $form['islandora_videojs_responsive'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Responsive player'),
-      '#description' => $this->t('Make the videojs player responsive (requires a responsive theme)'),
+      '#description' => $this->t('Make the videojs player responsive (requires
+        a responsive theme).'),
       '#default_value' => $this->config('islandora_videojs.settings')->get('islandora_videojs_responsive'),
     ];
     $form['submit'] = [
