@@ -62,8 +62,7 @@ class Admin extends ConfigFormBase {
     $form['islandora_videojs_responsive'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Responsive player'),
-      '#description' => $this->t('Make the videojs player responsive (requires
-        a responsive theme).'),
+      '#description' => $this->t('Make the videojs player responsive (requires a responsive theme).'),
       '#default_value' => $this->config('islandora_videojs.settings')->get('islandora_videojs_responsive'),
     ];
     $form['submit'] = [
